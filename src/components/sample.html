@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Eye Tracking Demo</title>
+    <!-- EyeGesturesLite CSS -->
+    <link rel="stylesheet" href="https://eyegestures.com/eyegestures.css" />
+ 
+    <!-- Supporting libraries for EyeGesturesLite -->
+   
+    <!-- EyeGesturesLite JavaScript -->
+   
+ 
+    <style type="text/css">
+      body {
+        margin: 0;
+        background-color: #383c45;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Hidden elements for EyeGesturesLite -->
+    <video
+      id="video"
+      width="640"
+      height="480"
+      autoplay
+      style="display: none"
+    ></video>
+    <div id="status" style="display: none">Initializing...</div>
+    <div id="error" style="display: none"></div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://www.lactame.com/lib/ml/6.0.0/ml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+    <script src="https://eyegestures.com/eyegestures.js"></script>
+    <script>
+      // Store gaze direction state
+      let currentGazeDirection = {
+        horizontal: null,
+        vertical: null
+      };
+ 
+      // Function to detect gaze direction
+      function detectGazeDirection(point) {
+        const x = point[0];
+        const y = point[1];
+        const screenCenter = window.innerWidth / 2;
+        const screenMiddle = window.innerHeight / 2;
+       
+        // Horizontal detection
+        const horizontal = x < screenCenter ? "left" : "right";
+       
+        // Vertical detection
+        const vertical = y < screenMiddle ? "top" : "bottom";
+       
+        console.log(`Gaze direction - Vertical: ${vertical}, Horizontal: ${horizontal}`);
+        return { horizontal, vertical };
+      }
+ 
+      function onPoint(point, calibration) {
+        // Log raw gaze position
+        console.log("Gaze position:", point[0], point[1]);
+ 
+        // Update the current gaze direction
+        currentGazeDirection = detectGazeDirection(point);
+      }
+ 
+      // Initialize EyeGesturesLite
+      var gestures = new EyeGestures("video", onPoint);
+      gestures.start();
+    </script>
+  </body>
+</html>
